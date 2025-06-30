@@ -1,0 +1,332 @@
+###########################################
+# JAVA & MAVEN
+###########################################
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+
+###########################################
+# SPRING BOOT & MICROSERVICES
+###########################################
+
+# Spring Boot
+.springBeans
+.sts4-cache/
+spring-boot-*.log
+application-local.properties
+application-local.yml
+application-local.yaml
+
+# Actuator sensitive endpoints logs
+/logs/
+*.log.*
+
+# Service discovery & configuration
+*.pid
+*.orig
+
+# Load testing results (Locust, JMeter, etc.)
+/locust/results/
+/performance-tests/results/
+*.jtl
+*.html
+
+###########################################
+# DOCKER & CONTAINERS
+###########################################
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+docker-compose.local.yml
+Dockerfile.local
+
+# Container logs
+/docker-logs/
+
+###########################################
+# DATABASES
+###########################################
+
+# H2 Database
+*.db
+*.trace.db
+*.lock.db
+
+# PostgreSQL dumps
+*.sql
+*.dump
+
+###########################################
+# IDE CONFIGURATIONS
+###########################################
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.metadata
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.loadpath
+.recommenders
+.externalToolBuilders/
+*.launch
+.pydevproject
+.cproject
+.autotools
+.buildpath
+.target
+.tern-project
+.texlipse
+.scala_dependencies
+.worksheet
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+###########################################
+# BUILD TOOLS
+###########################################
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# SBT
+.sbt
+project/target/
+project/project/
+
+###########################################
+# TESTING & COVERAGE
+###########################################
+
+# Test results
+/test-output/
+/test-results/
+*.test
+**/test-results/
+
+# Coverage reports
+/coverage/
+*.exec
+*.ec
+
+# JUnit
+*.xml
+
+###########################################
+# MONITORING & OBSERVABILITY
+###########################################
+
+# Prometheus metrics
+/metrics/
+
+# Jaeger traces
+/traces/
+
+# ELK Stack logs
+/elk-logs/
+
+###########################################
+# SECURITY & SECRETS
+###########################################
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Secrets
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# OAuth & JWT
+*.token
+
+###########################################
+# CLOUD & INFRASTRUCTURE
+###########################################
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Kubernetes
+*.kubeconfig
+
+# AWS
+.aws/
+
+# Azure
+.azure/
+
+###########################################
+# COMMUNICATION & MESSAGING
+###########################################
+
+# RabbitMQ
+/rabbitmq-data/
+
+# Kafka
+/kafka-logs/
+
+###########################################
+# TEMPORARY & CACHE FILES
+###########################################
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Cache directories
+.cache/
+*.cache
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+*.stackdump
+
+###########################################
+# VERSION CONTROL
+###########################################
+
+# Git
+*.orig
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+###########################################
+# DOCUMENTATION
+###########################################
+
+# Generated documentation
+/docs/build/
+*.html
+README.html
+
+###########################################
+# MISCELLANEOUS
+###########################################
+
+# Scratches and notes
+/scratch/
+/notes/
+*.notes
+*.scratch
+
+# Editor backup files
+*~
+.#*
+*#
+
+# JRebel
+rebel.xml
+
+# Node.js (if using for frontend/tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (for scripts/tools like Locust)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Project specific
+.exercism/
+*.sublime-*
