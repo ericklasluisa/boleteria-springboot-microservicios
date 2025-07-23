@@ -11,25 +11,27 @@ spring:
           enabled: true
           lower-case-service-id: true
 
-      routes:
-        - id: mis-publicaciones-autor
-          uri: lb://SERVICIO-PUBLICACIONES
-          predicates:
-            - Path=/api/v1/demo/autor/**
-          filters:
-            - StripPrefix=3
-        - id: mis-publicaciones-libro
-          uri: lb://SERVICIO-PUBLICACIONES
-          predicates:
-            - Path=/api/v1/libro/**
-          filters:
-            - StripPrefix=2
-        - id: ms-notificaciones
-          uri: lb://SERVICIO-NOTIFICACIONES
-          predicates:
-            - Path=/api/v1/notificaciones/**
-          filters:
-            - StripPrefix=2
+      server:
+        webmvc:
+          routes:
+          - id: mis-publicaciones-autor
+            uri: lb://SERVICIO-PUBLICACIONES
+            predicates:
+              - Path=/api/v1/demo/autor/**
+            filters:
+              - StripPrefix=3
+          - id: mis-publicaciones-libro
+            uri: lb://SERVICIO-PUBLICACIONES
+            predicates:
+              - Path=/api/v1/libro/**
+            filters:
+              - StripPrefix=2
+          - id: ms-notificaciones
+            uri: lb://SERVICIO-NOTIFICACIONES
+            predicates:
+              - Path=/api/v1/notificacion/**
+            filters:
+              - StripPrefix=2
 
 eureka:
   client:

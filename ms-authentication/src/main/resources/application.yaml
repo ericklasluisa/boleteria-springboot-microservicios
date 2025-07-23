@@ -1,11 +1,16 @@
+application:
+  security:
+    jwt:
+      secret-key: TGxhdmVfU2VjcmV0YV9Kc29uX1dlYl9Ub2tlbl9FbmN1ZW50bw==
+      expiration: 86400000 # 1 day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
 spring:
   application:
-    name: SERVICIO-PUBLICACIONES
+    name: servicio-autenticacion
   datasource:
-    #    url: jdbc:postgresql://localhost:5432/db-publicaciones
-    #    username: postgres
-    #    password: qwerty123
-    url: jdbc:postgresql://localhost:26257/publicaciones_db?user=root&password=
+    url: jdbc:postgresql://localhost:26257/auth_db?user=root&password=
     username: root
     password:
   jpa:
@@ -39,7 +44,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
   endpoint:
     health:
       show-details: always
