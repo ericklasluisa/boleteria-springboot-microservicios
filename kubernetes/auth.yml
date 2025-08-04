@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-authentication
+  namespace: microservicios
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-authentication
+  template:
+    metadata:
+      labels:
+        app: ms-authentication
+    spec:
+      containers:
+        - name: ms-authentication
+          image: ms-authentication:latest
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: AUTH_DB_URL
+          envFrom:
+            - configMapRef:
+                name: app-config

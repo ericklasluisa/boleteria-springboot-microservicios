@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mis-publicaciones
+  namespace: microservicios
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mis-publicaciones
+  template:
+    metadata:
+      labels:
+        app: mis-publicaciones
+    spec:
+      containers:
+        - name: mis-publicaciones
+          image: mis-publicaciones:latest
+          imagePullPolicy: Never
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: PUBLICACIONES_DB_URL
+          envFrom:
+            - configMapRef:
+                name: app-config

@@ -1,0 +1,227 @@
+# Nodo 1
+apiVersion: v1
+kind: Service
+metadata:
+  name: crdb-node1
+  namespace: microservicios
+spec:
+  ports:
+    - port: 26257
+      targetPort: 26257
+      name: grpc
+    - port: 8081
+      targetPort: 8080
+      name: http
+  selector:
+    app: cockroachdb
+    node: "node1"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: crdb-node1
+  namespace: microservicios
+spec:
+  serviceName: crdb-node1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cockroachdb
+      node: "node1"
+  template:
+    metadata:
+      labels:
+        app: cockroachdb
+        node: "node1"
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:v23.1.0 # ⭐ Versión fija en lugar de latest
+          ports:
+            - containerPort: 26257
+            - containerPort: 8080
+          command:
+            - "/cockroach/cockroach"
+            - "start"
+            - "--insecure"
+            - "--store=path=/cockroach/cockroach-data" # ⭐ Corregido path
+            - "--listen-addr=0.0.0.0:26257"
+            - "--http-addr=0.0.0.0:8080"
+            - "--join=crdb-node1:26257,crdb-node2:26257,crdb-node3:26257"
+            - "--advertise-addr=crdb-node1"
+            - "--cache=128MiB" # ⭐ NUEVO: Limitar cache
+            - "--max-sql-memory=128MiB" # ⭐ NUEVO: Limitar memoria SQL
+            - "--max-disk-temp-storage=1GiB" # ⭐ NUEVO: Limitar disco temporal
+          resources: # ⭐ NUEVO: Límites de recursos
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "300m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: datadir
+              mountPath: /cockroach/cockroach-data
+          env: # ⭐ NUEVO: Variable de entorno
+            - name: COCKROACH_CHANNEL
+              value: kubernetes-insecure
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# Nodo 2
+apiVersion: v1
+kind: Service
+metadata:
+  name: crdb-node2
+  namespace: microservicios
+spec:
+  ports:
+    - port: 26257
+      targetPort: 26257
+      name: grpc
+    - port: 8082
+      targetPort: 8080
+      name: http
+  selector:
+    app: cockroachdb
+    node: "node2"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: crdb-node2
+  namespace: microservicios
+spec:
+  serviceName: crdb-node2
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cockroachdb
+      node: "node2"
+  template:
+    metadata:
+      labels:
+        app: cockroachdb
+        node: "node2"
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:v23.1.0 # ⭐ Versión fija en lugar de latest
+          ports:
+            - containerPort: 26257
+            - containerPort: 8080
+          command:
+            - "/cockroach/cockroach"
+            - "start"
+            - "--insecure"
+            - "--store=path=/cockroach/cockroach-data" # ⭐ Corregido path
+            - "--listen-addr=0.0.0.0:26257"
+            - "--http-addr=0.0.0.0:8080"
+            - "--join=crdb-node1:26257,crdb-node2:26257,crdb-node3:26257"
+            - "--advertise-addr=crdb-node2"
+            - "--cache=128MiB" # ⭐ NUEVO: Limitar cache
+            - "--max-sql-memory=128MiB" # ⭐ NUEVO: Limitar memoria SQL
+            - "--max-disk-temp-storage=1GiB" # ⭐ NUEVO: Limitar disco temporal
+          resources: # ⭐ NUEVO: Límites de recursos
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "300m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: datadir
+              mountPath: /cockroach/cockroach-data
+          env: # ⭐ NUEVO: Variable de entorno
+            - name: COCKROACH_CHANNEL
+              value: kubernetes-insecure
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+# Nodo 3
+apiVersion: v1
+kind: Service
+metadata:
+  name: crdb-node3
+  namespace: microservicios
+spec:
+  ports:
+    - port: 26257
+      targetPort: 26257
+      name: grpc
+    - port: 8083
+      targetPort: 8080
+      name: http
+  selector:
+    app: cockroachdb
+    node: "node3"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: crdb-node3
+  namespace: microservicios
+spec:
+  serviceName: crdb-node3
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cockroachdb
+      node: "node3"
+  template:
+    metadata:
+      labels:
+        app: cockroachdb
+        node: "node3"
+    spec:
+      containers:
+        - name: cockroachdb
+          image: cockroachdb/cockroach:v23.1.0 # ⭐ Versión fija en lugar de latest
+          ports:
+            - containerPort: 26257
+            - containerPort: 8080
+          command:
+            - "/cockroach/cockroach"
+            - "start"
+            - "--insecure"
+            - "--store=path=/cockroach/cockroach-data" # ⭐ Corregido path
+            - "--listen-addr=0.0.0.0:26257"
+            - "--http-addr=0.0.0.0:8080"
+            - "--join=crdb-node1:26257,crdb-node2:26257,crdb-node3:26257"
+            - "--advertise-addr=crdb-node3"
+            - "--cache=128MiB" # ⭐ NUEVO: Limitar cache
+            - "--max-sql-memory=128MiB" # ⭐ NUEVO: Limitar memoria SQL
+            - "--max-disk-temp-storage=1GiB" # ⭐ NUEVO: Limitar disco temporal
+          resources: # ⭐ NUEVO: Límites de recursos
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "300m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: datadir
+              mountPath: /cockroach/cockroach-data
+          env: # ⭐ NUEVO: Variable de entorno
+            - name: COCKROACH_CHANNEL
+              value: kubernetes-insecure
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

@@ -6,7 +6,7 @@ import ec.edu.espe.mis_.publicaciones.service.AutorService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/autor")
+@RequestMapping("/autor")
 public class AutorController {
 
     private final AutorService autorService;

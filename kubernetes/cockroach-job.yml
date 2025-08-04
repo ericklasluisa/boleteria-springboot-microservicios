@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cluster-init
+  namespace: microservicios
+spec:
+  template:
+    spec:
+      containers:
+        - name: cluster-init
+          image: cockroachdb/cockroach:latest
+          command:
+            - "/cockroach/cockroach"
+            - "init"
+            - "--insecure"
+            - "--host=crdb-node1:26257"
+      restartPolicy: OnFailure
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-databases
+  namespace: microservicios
+spec:
+  template:
+    spec:
+      containers:
+        - name: create-db
+          image: cockroachdb/cockroach:latest
+          command:
+            - /bin/bash
+            - -c
+            - |
+              /cockroach/cockroach sql --insecure --host=crdb-node1:26257 --execute="
+              CREATE DATABASE IF NOT EXISTS publicaciones_db;
+              CREATE DATABASE IF NOT EXISTS notificaciones_db;
+              CREATE DATABASE IF NOT EXISTS catalogo_db;
+              CREATE DATABASE IF NOT EXISTS auth_db;
+              "
+      restartPolicy: OnFailure
+  backoffLimit: 5

@@ -1,5 +1,6 @@
 package ec.edu.espe.mis_.publicaciones.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,5 +19,6 @@ public class Libro extends Publicacion {
 
     @ManyToOne
     @JoinColumn(name = "id_autor", nullable = false)
+    @JsonIgnore
     private Autor autor;
 }

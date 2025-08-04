@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: microservicios
+data:
+  # Eureka
+  EUREKA_SERVER_URL: "http://eureka-service:8761/eureka/"
+
+  # RabbitMQ (cambio a admin/admin como en tus configs)
+  RABBITMQ_HOST: "rabbitmq-service"
+  RABBITMQ_PORT: "5672"
+  RABBITMQ_USERNAME: "admin"
+  RABBITMQ_PASSWORD: "admin"
+
+  PUBLICACIONES_DB_URL: "jdbc:postgresql://crdb-node1:26257/publicaciones_db?user=root&password="
+  NOTIFICACIONES_DB_URL: "jdbc:postgresql://crdb-node2:26257/notificaciones_db?user=root&password="
+  CATALOGO_DB_URL: "jdbc:postgresql://crdb-node3:26257/catalogo_db?user=root&password="
+  AUTH_DB_URL: "jdbc:postgresql://crdb-node3:26257/auth_db?user=root&password="
+
+  # JWT para auth service
+  JWT_SECRET: "YmZha2Vfc2VjcmV0X2tleV9zaWduaW5nX2tleV93aXRoX3NhbHRfYXQtc2VjdXJpdHk="
+  JWT_EXPIRATION_MS: "3600000"
+
+  # Comunes
+  DB_USERNAME: "root"
+  DB_PASSWORD: ""

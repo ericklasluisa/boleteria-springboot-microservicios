@@ -6,35 +6,48 @@ spring:
     name: API-GATEWAY
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
-
-      routes:
-        - id: mis-publicaciones-autor
-          uri: lb://SERVICIO-PUBLICACIONES
-          predicates:
-            - Path=/api/v1/demo/autor/**
-          filters:
-            - StripPrefix=3
-        - id: mis-publicaciones-libro
-          uri: lb://SERVICIO-PUBLICACIONES
-          predicates:
-            - Path=/api/v1/libro/**
-          filters:
-            - StripPrefix=2
-        - id: ms-notificaciones
-          uri: lb://SERVICIO-NOTIFICACIONES
-          predicates:
-            - Path=/api/v1/notificaciones/**
-          filters:
-            - StripPrefix=2
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+          routes:
+            - id: mis-publicaciones-autor
+              uri: lb://SERVICIO-PUBLICACIONES
+              predicates:
+                - Path=/api/v1/demo/autor/**
+              filters:
+                - StripPrefix=3
+            - id: mis-publicaciones-libro
+              uri: lb://SERVICIO-PUBLICACIONES
+              predicates:
+                - Path=/api/v1/libro/**
+              filters:
+                - StripPrefix=2
+            - id: ms-notificaciones
+              uri: lb://SERVICIO-NOTIFICACIONES
+              predicates:
+                - Path=/api/v1/notificacion/**
+              filters:
+                - StripPrefix=2
+            - id: auth-service-1
+              uri: lb://auth-service
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=0
+            - id: auth-service-2
+              uri: lb://auth-service
+              predicates:
+                - Path=/api/roles/**
+              filters:
+                - StripPrefix=0
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
     fetch-registry: true
     register-with-eureka: true
   instance:
@@ -44,7 +57,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: "*"
   endpoint:
     health:
       show-details: always
+
+jwt:
+  secret: YmZha2Vfc2VjcmV0X2tleV9zaWduaW5nX2tleV93aXRoX3NhbHRfYXQtc2VjdXJpdHk=
