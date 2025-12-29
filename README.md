@@ -389,6 +389,8 @@ minikube ip
 
 ## 📚 API Documentation
 
+**Note**: All examples below use the API Gateway endpoint (port 8000) which is the recommended way to access services in production. For development and debugging, you can also access services directly using their dynamically assigned ports (visible in Eureka dashboard at http://localhost:8761).
+
 ### Authentication
 
 #### Login
@@ -416,7 +418,11 @@ Response:
 
 #### List Authors
 ```bash
+# Via API Gateway (recommended for production)
 GET http://localhost:8000/api/autor
+
+# Direct service access (for development/testing)
+GET http://localhost:<dynamic-port>/api/autor
 ```
 
 #### Create Author
@@ -581,9 +587,13 @@ aws eks update-kubeconfig --name boleteria-microservices --region us-east-1
 
 ```bash
 # Create repositories for each service
-for service in eureka-server api-gateway auth publicaciones catalogo notificaciones sincronizacion; do
-  aws ecr create-repository --repository-name ms-$service --region us-east-1
-done
+aws ecr create-repository --repository-name ms-eureka-server --region us-east-1
+aws ecr create-repository --repository-name ms-api-gateway --region us-east-1
+aws ecr create-repository --repository-name ms-auth --region us-east-1
+aws ecr create-repository --repository-name mis-publicaciones --region us-east-1
+aws ecr create-repository --repository-name ms-catalogo --region us-east-1
+aws ecr create-repository --repository-name ms-notificaciones --region us-east-1
+aws ecr create-repository --repository-name sincronizacion --region us-east-1
 ```
 
 #### 4. Build and Push Images
@@ -592,11 +602,36 @@ done
 # Login to ECR
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com
 
-# Build and push
+# Build and push all images
+# Replace <aws-account-id> with your AWS account ID
+
+# Eureka Server
 docker tag ms-eureka-server:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-eureka-server:latest
 docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-eureka-server:latest
 
-# Repeat for all services...
+# API Gateway
+docker tag ms-api-gateway:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-api-gateway:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-api-gateway:latest
+
+# Auth Service
+docker tag ms-auth:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-auth:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-auth:latest
+
+# Publications Service
+docker tag mis-publicaciones:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/mis-publicaciones:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/mis-publicaciones:latest
+
+# Catalog Service
+docker tag ms-catalogo:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-catalogo:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-catalogo:latest
+
+# Notifications Service
+docker tag ms-notificaciones:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-notificaciones:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-notificaciones:latest
+
+# Synchronization Service
+docker tag sincronizacion:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/sincronizacion:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/sincronizacion:latest
 ```
 
 #### 5. Update Kubernetes Manifests
