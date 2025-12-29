@@ -82,8 +82,7 @@ This project is a distributed microservices application that demonstrates modern
 
 - **Docker**: Containerization
 - **Kubernetes**: Container orchestration
-- **CockroachDB**: Distributed SQL database
-- **PostgreSQL**: Database protocol
+- **CockroachDB**: Distributed SQL database (PostgreSQL-compatible)
 - **RabbitMQ**: Message broker
 - **Locust**: Load testing framework
 
@@ -120,7 +119,7 @@ This project is a distributed microservices application that demonstrates modern
 
 ### 3. MS Auth (Authentication Service)
 - **Port**: Dynamic (registered with Eureka)
-- **Database**: PostgreSQL (auth_db)
+- **Database**: CockroachDB (auth_db)
 - **Purpose**: User authentication and authorization
 - **Features**:
   - JWT token generation
