@@ -117,7 +117,7 @@ This project is a distributed microservices application that demonstrates modern
   - Request/response filtering
   - JWT token validation
 
-### 3. MS Auth (Authentication Service)
+### 3. MS Authentication (Authentication Service)
 - **Port**: Dynamic (registered with Eureka)
 - **Database**: CockroachDB (auth_db)
 - **Purpose**: User authentication and authorization
@@ -126,6 +126,7 @@ This project is a distributed microservices application that demonstrates modern
   - User management
   - Role-based access control (RBAC)
   - OAuth2 security
+- **Note**: The project has two auth service implementations (`ms-auth` and `ms-authentication`). The Kubernetes deployment uses `ms-authentication`.
 
 ### 4. Mis Publicaciones (Publications Service)
 - **Port**: Dynamic (registered with Eureka)
@@ -190,7 +191,7 @@ cd boleteria-springboot-microservicios
 # Build each microservice
 cd ms-eureka-server && mvn clean install -DskipTests && cd ..
 cd ms-api-gateway && mvn clean install -DskipTests && cd ..
-cd ms-auth && mvn clean install -DskipTests && cd ..
+cd ms-authentication && mvn clean install -DskipTests && cd ..
 cd mis-publicaciones && mvn clean install -DskipTests && cd ..
 cd ms-catalogo && mvn clean install -DskipTests && cd ..
 cd ms-notificaciones && mvn clean install -DskipTests && cd ..
@@ -201,11 +202,13 @@ Or use a script:
 
 ```bash
 #!/bin/bash
-for service in ms-eureka-server ms-api-gateway ms-auth mis-publicaciones ms-catalogo ms-notificaciones sincronizacion; do
+for service in ms-eureka-server ms-api-gateway ms-authentication mis-publicaciones ms-catalogo ms-notificaciones sincronizacion; do
     echo "Building $service..."
     cd $service && mvn clean install -DskipTests && cd ..
 done
 ```
+
+**Note**: The project contains two authentication services: `ms-auth` and `ms-authentication`. The Kubernetes deployment uses `ms-authentication`, which is the recommended version.
 
 ## 💻 Local Development
 
@@ -257,8 +260,8 @@ mvn spring-boot:run
 cd ms-api-gateway
 mvn spring-boot:run
 
-# 3. Start Auth Service (in new terminal)
-cd ms-auth
+# 3. Start Authentication Service (in new terminal)
+cd ms-authentication
 mvn spring-boot:run
 
 # 4. Start Publications Service (in new terminal)
@@ -297,7 +300,7 @@ Ensure you have a running Kubernetes cluster (Minikube, Docker Desktop, or cloud
 # Build Docker images for each service
 docker build -t ms-eureka-server:latest ./ms-eureka-server
 docker build -t ms-api-gateway:latest ./ms-api-gateway
-docker build -t ms-auth:latest ./ms-auth
+docker build -t ms-authentication:latest ./ms-authentication
 docker build -t mis-publicaciones:latest ./mis-publicaciones
 docker build -t ms-catalogo:latest ./ms-catalogo
 docker build -t ms-notificaciones:latest ./ms-notificaciones
@@ -589,7 +592,7 @@ aws eks update-kubeconfig --name boleteria-microservices --region us-east-1
 # Create repositories for each service
 aws ecr create-repository --repository-name ms-eureka-server --region us-east-1
 aws ecr create-repository --repository-name ms-api-gateway --region us-east-1
-aws ecr create-repository --repository-name ms-auth --region us-east-1
+aws ecr create-repository --repository-name ms-authentication --region us-east-1
 aws ecr create-repository --repository-name mis-publicaciones --region us-east-1
 aws ecr create-repository --repository-name ms-catalogo --region us-east-1
 aws ecr create-repository --repository-name ms-notificaciones --region us-east-1
@@ -613,9 +616,9 @@ docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-eureka-server:la
 docker tag ms-api-gateway:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-api-gateway:latest
 docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-api-gateway:latest
 
-# Auth Service
-docker tag ms-auth:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-auth:latest
-docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-auth:latest
+# Authentication Service
+docker tag ms-authentication:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-authentication:latest
+docker push <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/ms-authentication:latest
 
 # Publications Service
 docker tag mis-publicaciones:latest <aws-account-id>.dkr.ecr.us-east-1.amazonaws.com/mis-publicaciones:latest
@@ -692,9 +695,12 @@ boleteria-springboot-microservicios/
 │   ├── src/
 │   ├── Dockerfile
 │   └── pom.xml
-├── ms-auth/                     # Authentication service
+├── ms-auth/                     # Authentication service (alternative implementation)
 │   ├── src/
 │   ├── Dockerfile
+│   └── pom.xml
+├── ms-authentication/           # Authentication service (used in K8s deployment)
+│   ├── src/
 │   └── pom.xml
 ├── mis-publicaciones/           # Publications service
 │   ├── src/
